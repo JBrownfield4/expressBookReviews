@@ -5,27 +5,35 @@ let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
 
-public_users.post("/register", (req,res) => {
-    const { username, password } = req.body;
-
-    // Check if username or password is missing
-    if (!username || !password) {
-     return res.status(400).json({message: 'Please provide a valid username and password'});
+const doesExist = (username)=>{
+    let userswithsamename = users.filter((user)=>{
+      return user.username === username
+    });
+    if(userswithsamename.length > 0){
+      return true;
+    } else {
+      return false;
     }
-  
-    // Check if username already exists
-    const userExists = users.find(user => user.username === username);
-    if (userExists) {
-      return res.status(409).json({message: 'Username already exists'});
+  }
+ 
+ 
+  public_users.post('/register', (req,res) => {
+    //Write your code here
+    const username = req.body.username;
+    const password = req.body.password;
+ 
+ 
+    if (username && password) {
+      if (!doesExist(username)) {
+        users.push({"username":username,"password":password});
+        return res.status(200).json({message: "User successfully registred. Now you can login"});
+      } else {
+        return res.status(404).json({message: "User already exists!"});
+      }
     }
-  
-    // Add the new user to the users array
-    users.push({username, password});
-  
-    // Return a success message
-    return res.status(200).json({message: 'User registered successfully'});
+    return res.status(404).json({message: "Unable to register user."});
   });
-  
+
 
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
@@ -35,17 +43,15 @@ public_users.get('/',function (req, res) {
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
-
-  let isbn = req.params.isbn;
-  let booksList=Object.values(books)
-  let book = booksList.find(b => b.isbn===isbn);
-  if (book) {
-    let bookDetails = JSON.stringify(book);
-    res.send(`Book details for ISBN ${isbn}: ${bookDetails}`);
-  } else {
-    res.send(`No book found for ISBN ${isbn}`);}
- });
-  
+    let isbn = req.params.isbn;
+    let booksList=Object.values(books)
+    let book = booksList.find(b => b.isbn===isbn);
+    if (book) {
+      let bookDetails = JSON.stringify(book);
+      res.send(`Book details for ISBN ${isbn}: ${bookDetails}`);
+    } else {
+      res.send(`No book found for ISBN ${isbn}`);}
+   });  
 
 
 // Get book details based on author
