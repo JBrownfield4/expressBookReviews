@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 let books = require("./booksdb.js");
 const regd_users = express.Router();
 
-let users = [];
+let users = ["user","pass"];
 
 const isValid = (username)=>{ //returns boolean(test)
     return users.find(user => user.username === username && user.password === password);
@@ -102,9 +102,4 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
 
 module.exports.authenticated = regd_users;
 module.exports.isValid = isValid;
-module.exports.users = users;body.review;
-    const username = req.session.username;
-  
-    let booksList = Object.values(books)
-    const book = booksList.find(b => b.isbn == isbn)
-    // If the ISBN 
+module.exports.users = users;
