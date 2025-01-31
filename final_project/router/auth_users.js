@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 let books = require("./booksdb.js");
 const regd_users = express.Router();
 
-let users = ["user","pass"];
+let users = [];
 
 const isValid = (username)=>{ //returns boolean(test)
     return users.find(user => user.username === username && user.password === password);
@@ -23,50 +23,51 @@ const authenticatedUser = (username,password)=>{ //returns boolean(test)
    return false;
  }
  //only registered users can login
- regd_users.post("/login", (req,res) => {
-   const { username, password } = req.body;
+// regd_users.post("/login", (req,res) => {
+   //const { username, password } = req.body;
  
    // Check if username or password is missing
-   if (!username || !password) {
-     return res.status(400).json({ message: 'Please provide a valid username and password' });
-   }
-   const user = users.find(u => u.username === username && u.password === password);
+   //if (!username || !password) {
+//     return res.status(400).json({ message: 'Please provide a valid username and password' });
+   //}
+   //const user = users.find(u => u.username === username && u.password === password);
  
    // Check if username and password match
-   if (username === user.username && password === user.password) {
-     const accessToken = jwt.sign({ username, userPassword: password }, "secretKey", { expiresIn: '1h' });
+   //if (username === user.username && password === user.password) {
+//     const accessToken = jwt.sign({ username, userPassword: password }, "secretKey", { expiresIn: '1h' });
  
      // Store the access token in the session
-     req.session.accessToken = accessToken;
+     //req.session.accessToken = accessToken;
  
-     return res.status(200).json({ message: 'Login successful',accessToken });
-   } else {
-     return res.status(401).json({ message: 'Invalid username or password' });
-   }
- });
+     //return res.status(200).json({ message: 'Login successful',accessToken });
+   //} else {
+     //return res.status(401).json({ message: 'Invalid username or password' });
+   //}
+ //});
 
 //only registered users can login
 regd_users.post("/login", (req,res) => {
-  //Write your code here
-  const { username, password } = req.body;
-
-  // Check if username or password is missing
-  if (!username || !password) {
-    return res.status(400).json({ message: 'Please provide a valid username and password' });
-  }
-  const user = users.find(u => u.username === username && u.password === password);
-
-  // Check if username and password match
-  if (username === user.username && password === user.password) {
-    const accessToken = jwt.sign({ username, userPassword: password }, "secretKey", { expiresIn: '1h' });
-
-    // Store the access token in the session
-    req.session.accessToken = accessToken;
-
-    return res.status(200).json({ message: 'Login successful',accessToken });
-  } else {
-    return res.status(401).json({ message: 'Invalid username or password' });
-  }
+  //Write your code here (Example)
+    const username = req.body.username;
+    const password = req.body.password;
+    // Check if username or password is missing
+    if (!username || !password) {
+        return res.status(404).json({ message: "Error logging in" });
+    }
+    // Authenticate user
+    if (authenticatedUser(username, password)) {
+        // Generate JWT access token
+        let accessToken = jwt.sign({
+            data: password
+        }, 'access', { expiresIn: 60 * 60 });
+        // Store access token and username in session
+        req.session.authorization = {
+            accessToken, username
+        }
+        return res.status(200).send("User successfully logged in");
+    } else {
+        return res.status(208).json({ message: "Invalid Login. Check username and password" });
+    }
 });
 
 // Add a book review
