@@ -5,7 +5,7 @@ let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
 public_users.post("/register", (req,res) => {
-    //Write your code here (still not working yet)
+    //Write your code here (Example)
     const username = req.body.username;
     const password = req.body.password;
     // Check if both username and password are provided
