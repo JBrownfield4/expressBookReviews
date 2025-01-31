@@ -49,7 +49,6 @@ const authenticatedUser = (username, password) => {
     }
 }
 
-app.use(session({secret:"fingerpint"},resave=true,saveUninitialized=true));
 
   
   // Get the book list available in the shop
