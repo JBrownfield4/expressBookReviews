@@ -9,6 +9,8 @@ const isValid = (username)=>{ //returns boolean(test)
     return users.find(user => user.username === username && user.password === password);
 }
 
+
+
 const authenticatedUser = (username,password)=>{ //returns boolean(test)
     let usersList = Object.values(users);
     let user = usersList.find(b => b.username==username)
@@ -22,28 +24,6 @@ const authenticatedUser = (username,password)=>{ //returns boolean(test)
    // username and/or password do not match, return false
    return false;
  }
- //only registered users can login
-// regd_users.post("/login", (req,res) => {
-   //const { username, password } = req.body;
- 
-   // Check if username or password is missing
-   //if (!username || !password) {
-//     return res.status(400).json({ message: 'Please provide a valid username and password' });
-   //}
-   //const user = users.find(u => u.username === username && u.password === password);
- 
-   // Check if username and password match
-   //if (username === user.username && password === user.password) {
-//     const accessToken = jwt.sign({ username, userPassword: password }, "secretKey", { expiresIn: '1h' });
- 
-     // Store the access token in the session
-     //req.session.accessToken = accessToken;
- 
-     //return res.status(200).json({ message: 'Login successful',accessToken });
-   //} else {
-     //return res.status(401).json({ message: 'Invalid username or password' });
-   //}
- //});
 
 //only registered users can login
 regd_users.post("/login", (req,res) => {
