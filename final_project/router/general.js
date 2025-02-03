@@ -25,8 +25,8 @@ public_users.post("/register", (req,res) => {
 // Check if a user with the given username already exists
 const doesExist = (username) => {
     // Filter the users array for any user with the same username
-     let userswithsamename = users.filter((user) => {
-       return user.username === username;
+    let userswithsamename = users.filter((user) => {
+        return user.username === username;
     });
     // Return true if any user with the same username is found, otherwise false
     if (userswithsamename.length > 0) {
@@ -35,60 +35,23 @@ const doesExist = (username) => {
         return false;
     }
 }
-// Check if the user with the given username and password exists
-//const authenticatedUser = (username, password) => {
     // Filter the users array for any user with the same username and password
-    //let validusers = users.filter((user) => {
-        //return (user.username === username && user.password === password);
-    //});
+    let validusers = users.filter((user) => {
+        return (user.username === username && user.password === password);
     // Return true if any valid user is found, otherwise false
-    //if (validusers.length > 0) {
-        //return true;
-    //} else {
-        //return false;
-    //}
-//}
-
+    if (validusers.length > 0) {
+        return true;
+    } else {
+        return false;
+    }
+    })
 
   
   // Get the book list available in the shop
   public_users.get('/', function (req, res) {
     res.send(JSON.stringify(books));
   });
-  // Asynchronous version
-  public_users.get('/', async function (req, res) {
-      try {
-          const response = await axios.get("https://api.example.com/books");
-          res.status(200).json({message: response.data});
-      }
-      catch(error) {
-          console.error("Error fetching books: "+ error);
-          res.status(500).json({errorMessage: "Error fetching books"});
-      }
-  }); 
-  
-
-// Get the book list available in the shop
-public_users.get('/',function (req, res) {
-
-  const all_books = new Promise((resolve,reject)=>{
-
-    if(books){
-      // return res.status(300).json(books);
-      resolve(books)
-    }
-    else
-    {
-      // return res.status(404).json({message: 'No list of the books found'})
-      reject({error: 'No Book Library was found'})
-    }
-  })
-
-  all_books.then((resp)=>{
-    return res.status(200).json(resp);
-  }).catch(err=>res.status(403).json({error: err}))
-  
-});
+ 
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
