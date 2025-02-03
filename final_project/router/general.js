@@ -4,6 +4,7 @@ let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
+
 public_users.post("/register", (req,res) => {
     //Write your code here (Example)
     const username = req.body.username;
@@ -48,17 +49,26 @@ const doesExist = (username) => {
 
   
   // Get the book list available in the shop
-  public_users.get('/', function (req, res) {
-    res.send(JSON.stringify(books));
-  });
+
+  //public_users.get('/', function (req, res) {
+    //res.send(JSON.stringify(books));
+  //});
  
+  public_users.get("/", function (req, res) {
+    //Write your code here
+    const promise = new Promise((resolve, reject) => {
+      setTimeout(() => resolve(books), 600);
+    });
+  
+    promise.then((result) => {
+      return res.status(200).json({ books: result });
+    });
+  });
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
   let ISBN = req.params.isbn
-
   const book_by_isbn = new Promise((resolve, reject)=>{
-
     let book = books[ISBN]
     if(book)
     {
